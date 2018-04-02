@@ -1,3 +1,4 @@
+$('.modal').modal();
 
 $.ajax({
   dataType : "json",
@@ -8,9 +9,9 @@ $.ajax({
 
 
 function getData(data) {
-  // console.log(data);
-  var arr = data.results;
-  console.log(arr);
+  const arr = data.results;
+  // console.log(arr);
+  let  templeteCharacter = ``;
   $.each(arr, function(i,value){
       var infoMovie = value;
       // console.log(infoMovie);
@@ -18,45 +19,102 @@ function getData(data) {
       // console.log(titleMovie);
       var idEpisode = infoMovie.episode_id;
       // console.log(idEpisode);
-      var previewMovie = infoMovie.characters
+      var charactersMovie = infoMovie.characters
+        // console.log(charactersMovie);
+      $.each(charactersMovie, function (key,value) {
+        templeteCharacter += `<a href="#modal1"><li class="characters" data-url="${value}"> ${value} </li></a> `
 
-      // console.log(previewMovie)
-
-
-      paintMovie(titleMovie, idEpisode, previewMovie);
-
+      });
+      paintMovie(titleMovie, idEpisode, templeteCharacter);
     })
 };
 
-function charactersMovie (data) {
+function charactersMovie () {
     $.ajax({
       dataType : "json",
       url: "https://swapi.co/api/people/"
-    }).done()
+    }).done(function(json){
+        const characters = json;
+        const nameCharacter = characters.name;
+
+      console.log(characters);
+    })
 }
 
-function paintMovie(titleMovie, idEpisode, previewMovie){
-  let templete = `<div class="row">
-      <div class="col s12 m3">
-        <div class="card ">
+function paintMovie(titleMovie, idEpisode,templeteCharacter){
+  const movieContainer = document.getElementById('movi_Container');
+
+  let templete = `<div class="col s12 m6">
+        <div class="card"
           <div class="card-image">
-            <img class= "responsive-img" src="https://dummyimage.com/100x100">
-            <span class="card-title black">${titleMovie} ${idEpisode}</span>
-            <a class="btn-floating halfway-fab waves-effect waves-light red" id="scale-demo"><i class="material-icons">add</i></a>
+            <img class= "responsive-img" src="https://dummyimage.com/200x200">
+            <span class="card-title grey lighten-4">${titleMovie} Episode ${idEpisode}</span>
           </div>
           <div class="card-content">
-            <p></p>
+            <ul>${templeteCharacter}<ul>
           </div>
         </div>
-      </div>
-    </div>`
+      </div>`
 
-    const movieContainer = document.getElementById('movi_Container')
+//       <div class="row">
+//   <div class="col s12 m7">
+//     <div class="card">
+//       <div class="card-image">
+//         <img src="images/sample-1.jpg">
+//         <span class="card-title">Card Title</span>
+//       </div>
+//       <div class="card-content">
+//         <p>I am a very simple card. I am good at containing small bits of information.
+//         I am convenient because I require little markup to use effectively.</p>
+//       </div>
+//       <div class="card-action">
+//         <a href="#">This is a link</a>
+//       </div>
+//     </div>
+//   </div>
+// </div>
+
       movieContainer.innerHTML += templete;
+      let collectionHTML = document.getElementsByClassName('characters');
+      givenEventLis(collectionHTML);
+
+};
+
+function givenEventLis(collectionHTML) {
+  let listCharc= Array.from(collectionHTML);
+  // console.log(listCharc);
+  $.each(listCharc, function (li) {
+  })
+  $('.characters').click(getDetailsCharacter);
+};
+
+function getDetailsCharacter(e) {
+  e.preventDefault;
+  let theUrl = e.target.getAttribute('data-url');
+  $.ajax({
+    url: theUrl
+  }).done(paintInfoCharacters);
+};
+
+
+
+function paintInfoCharacters(json) {
+  console.log(json);
+  const namePersons = json.name ;
+
+  $('#character-name').html(json.name);
+  $('#birth-year').html(json.birth_year);
+  $('#hair-color').html(json.hair_color);
+  $('#height').html(json.height);
+  $('#mass').html(json.mass)
+  $('#skin-color').html(json.skin_color);
+  $('#eye-color').html(json.eye_color);
+
 };
 
 function loadpage() {
   paintMovie(titleMovie, idEpisode);
-}
+  paintInfoCharacters(json)
+};
 
 $(document).ready(loadpage);
