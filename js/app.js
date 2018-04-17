@@ -13,19 +13,20 @@ function getData(data) {
   // console.log(arr);
   let  templeteCharacter = ``;
   $.each(arr, function(i,value){
-      var infoMovie = value;
+      let imagesArray = ["./assets/images/a-new-hope.jpg", "./assets/images/attack-of-the-clones.jpg", "./assets/images/the-phantom-menace.jpg", "./assets/images/revenge-of-the-sith.jpg", "./assets/images/return-of-the-jedi.jpg", "./assets/images/the-empire-strikes-back.jpg", "./assets/images/the-force-awakens.jpg"]
+      let imgMovie = imagesArray[i];
+      let infoMovie = value;
       // console.log(infoMovie);
-      var titleMovie= infoMovie.title;
+      let titleMovie= infoMovie.title;
       // console.log(titleMovie);
-      var idEpisode = infoMovie.episode_id;
+     let idEpisode = infoMovie.episode_id;
       // console.log(idEpisode);
-      var charactersMovie = infoMovie.characters
-        // console.log(charactersMovie);
+      let charactersMovie = infoMovie.characters
       $.each(charactersMovie, function (key,value) {
         templeteCharacter += `<a href="#modal1"><li class="characters" data-url="${value}"> ${value} </li></a> `
 
       });
-      paintMovie(titleMovie, idEpisode, templeteCharacter);
+      paintMovie(imgMovie, titleMovie, idEpisode, templeteCharacter);
     })
 };
 
@@ -41,13 +42,13 @@ function charactersMovie () {
     })
 }
 
-function paintMovie(titleMovie, idEpisode,templeteCharacter){
+function paintMovie(imgMovie,titleMovie, idEpisode,templeteCharacter){
   const movieContainer = document.getElementById('movi_Container');
 
-  let templete = `<div class="col s12 m6">
+  let templete = `<div class="col s12 m4">
         <div class="card"
           <div class="card-image">
-            <img class= "responsive-img" src="https://dummyimage.com/200x200">
+            <img class= "responsive-img movie-img" src="${imgMovie}">
             <span class="card-title grey lighten-4">${titleMovie} Episode ${idEpisode}</span>
           </div>
           <div class="card-content">

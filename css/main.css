@@ -5,6 +5,11 @@ background: rgb(22, 31, 33);
 .mg {
   margin-top: 7%;
 }
+
 .nav-heigth {
   height: 20%;
+}
+
+.movie-img {
+  width: 100%;
 }
